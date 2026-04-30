@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Éclat - A premium fine-dining experience offering an unforgettable culinary journey." />
+    
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="Éclat | Fine Dining Restaurant" />
+    <meta property="og:description" content="A premium fine-dining experience offering an unforgettable culinary journey." />
+    <meta property="og:type" content="restaurant" />
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Éclat | Fine Dining</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS for Dark Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="/style.css" />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "Éclat",
+        "image": "https://eclat-dining.com/hero.jpg",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "42 Rue de la Lumière",
+          "addressLocality": "Manhattan",
+          "addressRegion": "NY",
+          "postalCode": "10012",
+          "addressCountry": "US"
+        },
+        "telephone": "+12125550198",
+        "menu": "https://eclat-dining.com/#menu",
+        "servesCuisine": "Modern European",
+        "priceRange": "$$$$",
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "17:00",
+            "closes": "23:00"
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Skip to content for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <header class="navbar" id="navbar">
+      <div class="container nav-container">
+        <a href="#home" class="logo">ÉCLAT</a>
+        
+        <nav class="nav-links">
+          <a href="#menu" class="nav-link">The Menu</a>
+          <a href="#experience" class="nav-link">The Experience</a>
+          <a href="#reservations" class="nav-link">Reservations</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+
+        <a href="#reservations" class="btn btn-primary nav-cta">Book a Table</a>
+
+        <button class="mobile-menu-btn" aria-label="Toggle Menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay">
+      <button class="close-menu-btn" aria-label="Close Menu">
+        <i data-lucide="x"></i>
+      </button>
+      <nav class="mobile-nav-links">
+        <a href="#menu" class="mobile-nav-link">The Menu</a>
+        <a href="#experience" class="mobile-nav-link">The Experience</a>
+        <a href="#reservations" class="mobile-nav-link">Reservations</a>
+        <a href="#contact" class="mobile-nav-link">Contact</a>
+      </nav>
+      <div class="mobile-menu-footer">
+        <p>42 Rue de la Lumière, Manhattan, NY</p>
+        <div class="social-icons">
+          <i data-lucide="instagram"></i>
+          <i data-lucide="facebook"></i>
+        </div>
+      </div>
+    </div>
+
+    <main id="main-content">
+      <!-- Section 1: Home/Hero -->
+      <section id="home" class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-content container">
+          <div class="status-badge">
+            <span class="status-indicator"></span>
+            <span id="open-status">Opening Tonight at 5:00 PM</span>
+          </div>
+          <h1 class="hero-title">Culinary<br>Brilliance</h1>
+          <p class="hero-subtitle">A quiet luxury fine-dining experience in the heart of Manhattan.</p>
+          
+          <!-- Inline Booking Widget -->
+          <form class="inline-booking" id="quick-book-form">
+            <div class="booking-field">
+              <label for="quick-date">Date</label>
+              <input type="date" id="quick-date" required>
+            </div>
+            <div class="booking-field">
+              <label for="quick-time">Time</label>
+              <select id="quick-time" required>
+                <option value="" disabled selected>Select Time</option>
+                <option value="17:00">5:00 PM</option>
+                <option value="18:00">6:00 PM</option>
+                <option value="19:00">7:00 PM</option>
+                <option value="20:00">8:00 PM</option>
+                <option value="21:00">9:00 PM</option>
+              </select>
+            </div>
+            <div class="booking-field">
+              <label for="quick-guests">Guests</label>
+              <select id="quick-guests" required>
+                <option value="1">1 Guest</option>
+                <option value="2" selected>2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="5">5+ Guests</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary booking-submit">Reserve</button>
+          </form>
+        </div>
+        
+        <a href="#menu" class="scroll-indicator" aria-label="Scroll down">
+          <i data-lucide="chevron-down"></i>
+        </a>
+      </section>
+
+      <!-- Section 2: The Menu -->
+      <section id="menu" class="menu-section">
+        <div class="container">
+          <div class="section-header text-center fade-in">
+            <h2>The Menu</h2>
+            <p class="subtitle">Curated seasonal selections</p>
+          </div>
+          
+          <div class="menu-tabs fade-in">
+            <button class="tab-btn active" data-category="appetizers">Appetizers</button>
+            <button class="tab-btn" data-category="mains">Mains</button>
+            <button class="tab-btn" data-category="desserts">Desserts</button>
+            <button class="tab-btn" data-category="sommelier">Sommelier</button>
+          </div>
+
+          <div class="menu-content" id="menu-container">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: The Experience -->
+      <section id="experience" class="experience-section">
+        <div class="experience-grid">
+          <!-- Populated by JS / Images -->
+        </div>
+        
+        <div class="philosophy-wrapper fade-in">
+          <div class="container text-center">
+            <h2>Our Philosophy</h2>
+            <p class="philosophy-text">"True luxury is found in the meticulous sourcing of humble ingredients and elevating them into something transcendent."</p>
+            <p class="chef-name">— Chef Arjun Malhotra</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Reservations -->
+      <section id="reservations" class="reservations-section">
+        <div class="container flex-row">
+          <div class="reservations-info fade-in">
+            <h2>Join Us</h2>
+            <p>Reservations open 30 days in advance. For parties larger than 6 or private event inquiries, please use our contact form.</p>
+            <ul class="guidelines-list">
+              <li><i data-lucide="clock"></i> Grace period of 15 minutes</li>
+              <li><i data-lucide="shirt"></i> Smart casual attire required</li>
+              <li><i data-lucide="info"></i> 24-hour cancellation policy</li>
+            </ul>
+          </div>
+          
+          <div class="reservations-form-wrapper fade-in">
+            <!-- Full booking flow via JS will go here, for now a placeholder structure -->
+            <form id="full-reservation-form" class="dark-form">
+              <h3>Find a Table</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="res-date">Date</label>
+                  <input type="date" id="res-date" required>
+                </div>
+                <div class="form-group">
+                  <label for="res-guests">Party Size</label>
+                  <select id="res-guests" required>
+                    <option value="2">2 Guests</option>
+                    <option value="3">3 Guests</option>
+                    <option value="4">4 Guests</option>
+                    <option value="5">5 Guests</option>
+                    <option value="6">6 Guests</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline full-width mt-4">Check Availability</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Contact -->
+      <section id="contact" class="contact-section">
+        <div class="contact-grid">
+          <div class="contact-form-side container fade-in">
+            <h2>Private Events & Inquiries</h2>
+            <form id="contact-form" class="dark-form">
+              <div class="form-group">
+                <input type="text" id="contact-name" placeholder="Your Name" required>
+              </div>
+              <div class="form-group">
+                <input type="email" id="contact-email" placeholder="Your Email" required>
+              </div>
+              <div class="form-group">
+                <select id="contact-type" required>
+                  <option value="" disabled selected>Inquiry Type</option>
+                  <option value="private_dining">Private Dining</option>
+                  <option value="corporate">Corporate Event</option>
+                  <option value="general">General Question</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <textarea id="contact-message" rows="4" placeholder="Message details..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Send Inquiry</button>
+            </form>
+            
+            <div class="contact-details mt-8">
+              <div class="detail-item">
+                <i data-lucide="map-pin"></i>
+                <p>42 Rue de la Lumière<br>Manhattan, NY 10012</p>
+              </div>
+              <div class="detail-item">
+                <i data-lucide="phone"></i>
+                <p>+1 (212) 555-0198</p>
+              </div>
+              <div class="detail-item">
+                <i data-lucide="mail"></i>
+                <p>reservations@eclat-dining.com</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="map-side" id="map">
+            <!-- Leaflet map injected here -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="instagram-grid" id="insta-grid">
+        <!-- Injected via JS -->
+      </div>
+      
+      <div class="footer-content container">
+        <div class="footer-brand">
+          <h3>ÉCLAT</h3>
+          <p class="tagline">An unforgettable culinary journey.</p>
+        </div>
+        
+        <div class="footer-hours">
+          <h4>Hours</h4>
+          <p>Mon: Closed</p>
+          <p>Tue - Thu: 5:00 PM - 10:00 PM</p>
+          <p>Fri - Sat: 5:00 PM - 11:00 PM</p>
+          <p>Sun: 5:00 PM - 9:30 PM</p>
+        </div>
+        
+        <div class="footer-links">
+          <h4>Explore</h4>
+          <a href="#menu">Menu</a>
+          <a href="#experience">Experience</a>
+          <a href="#reservations">Reservations</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      
+      <div class="footer-bottom container">
+        <p>&copy; 2026 Éclat Fine Dining. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-sticky-cta">
+      <a href="#reservations" class="btn btn-primary full-width">Book a Table</a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
