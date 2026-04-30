@@ -178,24 +178,7 @@ document.querySelectorAll('.fade-in').forEach(el => {
   observer.observe(el);
 });
 
-// --- Inject Images ---
-// For Experience Grid
-const expGrid = document.querySelector('.experience-grid');
-const galleryImages = [
-  '/assets/images/gallery-interior.png',
-  'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=800&q=80', // Steak prep
-  '/assets/images/chef.png',
-  'https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=800&q=80', // Wine
-  '/assets/images/food-main.png'
-];
 
-galleryImages.forEach(src => {
-  const div = document.createElement('div');
-  div.className = 'exp-item fade-in';
-  div.innerHTML = `<img src="${src}" alt="Restaurant Experience" class="exp-img" loading="lazy">`;
-  expGrid.appendChild(div);
-  observer.observe(div);
-});
 
 // For Instagram Grid (Footer)
 const instaGrid = document.getElementById('insta-grid');
