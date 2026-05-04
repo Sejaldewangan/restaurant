@@ -24,15 +24,6 @@ window.addEventListener('scroll', () => {
   } else {
     navbar.classList.remove('scrolled');
   }
-
-  // Show mobile sticky CTA after scrolling past hero
-  if (window.innerWidth <= 768 && mobileStickyCta) {
-    if (window.scrollY > window.innerHeight * 0.5) {
-      mobileStickyCta.classList.add('visible');
-    } else {
-      mobileStickyCta.classList.remove('visible');
-    }
-  }
 });
 
 // --- Mobile Menu Toggle ---
@@ -90,28 +81,47 @@ setInterval(updateStatus, 60000); // Check every minute
 // --- Menu Data & Rendering ---
 const menuData = {
   appetizers: [
-    { name: "Tuna Tartare", desc: "Avocado mousse, crispy wonton, ponzu glaze", price: "$28", tags: ["GF"] },
-    { name: "Wagyu Carpaccio", desc: "Black truffle, parmigiano reggiano, capers", price: "$34", tags: ["GF"] },
-    { name: "Seared Scallops", desc: "Cauliflower purée, golden raisin caper emulsion", price: "$32", tags: ["GF"] },
-    { name: "Burrata & Heirloom", desc: "Aged balsamic, basil oil, micro greens", price: "$24", tags: ["V", "GF"] }
+    { name: "Tuna Tartare", desc: "Avocado mousse, crispy wonton, ponzu glaze", price: "28", tags: ["GF"] },
+    { name: "Wagyu Carpaccio", desc: "Black truffle, parmigiano reggiano, capers", price: "34", tags: ["GF"] },
+    { name: "Seared Scallops", desc: "Cauliflower purée, golden raisin caper emulsion", price: "32", tags: ["GF"] },
+    { name: "Burrata & Heirloom", desc: "Aged balsamic, basil oil, micro greens", price: "24", tags: ["V", "GF"] }
   ],
   mains: [
-    { name: "A5 Japanese Wagyu", desc: "Charred broccolini, pomme purée, bone marrow jus", price: "$120", tags: ["GF"] },
-    { name: "Miso Glazed Black Cod", desc: "Bok choy, dashi broth, lotus root crisp", price: "$52", tags: [] },
-    { name: "Duck Breast", desc: "Parsnip silk, cherry gastrique, pistachio crumb", price: "$48", tags: ["GF"] },
-    { name: "Wild Mushroom Risotto", desc: "Acquerello rice, shaved black truffle, mascarpone", price: "$42", tags: ["V", "GF"] }
+    { name: "A5 Japanese Wagyu", desc: "Charred broccolini, pomme purée, bone marrow jus", price: "120", tags: ["GF"] },
+    { name: "Miso Glazed Black Cod", desc: "Bok choy, dashi broth, lotus root crisp", price: "52", tags: [] },
+    { name: "Duck Breast", desc: "Parsnip silk, cherry gastrique, pistachio crumb", price: "48", tags: ["GF"] },
+    { name: "Wild Mushroom Risotto", desc: "Acquerello rice, shaved black truffle, mascarpone", price: "42", tags: ["V", "GF"] }
   ],
   desserts: [
-    { name: "Dark Chocolate Sphere", desc: "Valrhona chocolate, raspberry coulis, gold leaf", price: "$22", tags: ["V"] },
-    { name: "Lemon Basil Tart", desc: "Meyer lemon curd, torched meringue, basil syrup", price: "$18", tags: ["V"] },
-    { name: "Vanilla Bean Panna Cotta", desc: "Roasted strawberries, aged balsamic, micro mint", price: "$16", tags: ["GF", "V"] }
+    { name: "Dark Chocolate Sphere", desc: "Valrhona chocolate, raspberry coulis, gold leaf", price: "22", tags: ["V"] },
+    { name: "Lemon Basil Tart", desc: "Meyer lemon curd, torched meringue, basil syrup", price: "18", tags: ["V"] },
+    { name: "Vanilla Bean Panna Cotta", desc: "Roasted strawberries, aged balsamic, micro mint", price: "16", tags: ["GF", "V"] }
   ],
   sommelier: [
-    { name: "Opus One 2018", desc: "Napa Valley, Cabernet Blend - Glass", price: "$85", tags: [] },
-    { name: "Domaine de la Romanée-Conti", desc: "Burgundy, Pinot Noir - Bottle", price: "$Market", tags: [] },
-    { name: "Krug Grande Cuvée", desc: "Champagne - Glass", price: "$65", tags: [] }
+    { name: "Opus One 2018", desc: "Napa Valley, Cabernet Blend - Glass", price: "85", tags: [] },
+    { name: "Domaine de la Romanée-Conti", desc: "Burgundy, Pinot Noir - Bottle", price: "Market", tags: [] },
+    { name: "Krug Grande Cuvée", desc: "Champagne - Glass", price: "65", tags: [] }
   ]
 };
+
+// --- Menu Hover Image Logic ---
+const menuHoverImage = document.createElement('img');
+menuHoverImage.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'; // Tuna tartare macro shot
+menuHoverImage.className = 'menu-hover-image';
+menuHoverImage.alt = "Tuna Tartare";
+document.body.appendChild(menuHoverImage);
+
+function attachMenuHoverListeners() {
+  const hoverItems = document.querySelectorAll('.menu-item[data-hover-img="true"]');
+  hoverItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      menuHoverImage.classList.add('visible');
+    });
+    item.addEventListener('mouseleave', () => {
+      menuHoverImage.classList.remove('visible');
+    });
+  });
+}
 
 function renderMenu(category) {
   const items = menuData[category];
@@ -127,7 +137,7 @@ function renderMenu(category) {
     items.forEach(item => {
       const tagHtml = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
       grid.innerHTML += `
-        <div class="menu-item">
+        <div class="menu-item" ${item.name === "Tuna Tartare" ? 'data-hover-img="true"' : ''}>
           <div class="menu-item-header">
             <h3 class="menu-item-title">${item.name} ${item.tags.length ? `<span class="dietary-tags">${tagHtml}</span>` : ''}</h3>
             <span class="menu-item-price">${item.price}</span>
@@ -141,6 +151,8 @@ function renderMenu(category) {
     // Fade in
     menuContainer.style.transition = 'opacity 0.4s ease';
     menuContainer.style.opacity = '1';
+    
+    attachMenuHoverListeners();
   }, 200);
 }
 
@@ -178,7 +190,48 @@ document.querySelectorAll('.fade-in').forEach(el => {
   observer.observe(el);
 });
 
+// --- Reviews Section Interactions ---
+const reviewsSection = document.getElementById('reviews');
+const reviewCards = document.querySelectorAll('.review-card');
 
+reviewCards.forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    if (reviewsSection) reviewsSection.classList.add('hover-active');
+  });
+  card.addEventListener('mouseleave', () => {
+    if (reviewsSection) reviewsSection.classList.remove('hover-active');
+  });
+});
+
+// --- Mobile Navigation & Modal ---
+const mobBookBtn = document.getElementById('mob-book-btn');
+const mobileBookingModal = document.getElementById('mobile-booking-modal');
+const closeBookingModal = document.getElementById('close-booking-modal');
+
+if (mobBookBtn && mobileBookingModal) {
+  mobBookBtn.addEventListener('click', () => {
+    mobileBookingModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+}
+
+if (closeBookingModal && mobileBookingModal) {
+  closeBookingModal.addEventListener('click', () => {
+    mobileBookingModal.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+}
+
+const mobFullReservationForm = document.getElementById('mob-full-reservation-form');
+if (mobFullReservationForm) {
+  mobFullReservationForm.addEventListener('submit', e => {
+    e.preventDefault();
+    alert('Thank you! Your mobile reservation request has been received.');
+    mobileBookingModal.classList.remove('active');
+    document.body.style.overflow = '';
+    e.target.reset();
+  });
+}
 
 // For Instagram Grid (Footer)
 const instaGrid = document.getElementById('insta-grid');
