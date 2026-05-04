@@ -326,9 +326,9 @@
             </ul>
           </div>
           
-          <div class="reservations-form-wrapper fade-in">
-            <!-- Full booking flow via JS will go here, for now a placeholder structure -->
-            <form id="full-reservation-form" class="dark-form">
+          <div class="reservations-form-wrapper fade-in" id="reservation-wrapper">
+            <!-- Step 1: Check Availability -->
+            <form id="step1-form" class="dark-form res-step active-step">
               <h3>Find a Table</h3>
               <div class="form-grid">
                 <div class="form-group">
@@ -338,7 +338,8 @@
                 <div class="form-group">
                   <label for="res-guests">Party Size</label>
                   <select id="res-guests" required>
-                    <option value="2">2 Guests</option>
+                    <option value="1">1 Guest</option>
+                    <option value="2" selected>2 Guests</option>
                     <option value="3">3 Guests</option>
                     <option value="4">4 Guests</option>
                     <option value="5">5 Guests</option>
@@ -346,8 +347,53 @@
                   </select>
                 </div>
               </div>
-              <button type="button" class="btn btn-outline full-width mt-4">Check Availability</button>
+              <button type="submit" class="btn btn-outline full-width mt-4">Check Availability</button>
             </form>
+
+            <!-- Step 2: Time Selection -->
+            <div id="step2-times" class="res-step hidden-step">
+              <h3>Select a Time</h3>
+              <p class="step-subtitle">Availability for <span id="summary-date-guests"></span></p>
+              <div class="time-slots" id="time-slots-container">
+                <!-- Populated by JS -->
+              </div>
+              <button class="btn btn-text mt-4 back-btn" data-target="step1-form"><i data-lucide="arrow-left"></i> Back</button>
+            </div>
+
+            <!-- Step 3: Guest Details -->
+            <form id="step3-details" class="dark-form res-step hidden-step">
+              <h3>Guest Details</h3>
+              <p class="step-subtitle">Reserving for <span id="summary-time"></span></p>
+              <div class="form-floating">
+                <input type="text" id="res-name" placeholder=" " required>
+                <label for="res-name">Full Name</label>
+              </div>
+              <div class="form-floating">
+                <input type="email" id="res-email" placeholder=" " required>
+                <label for="res-email">Email Address</label>
+              </div>
+              <div class="form-floating">
+                <textarea id="res-requests" rows="2" placeholder=" "></textarea>
+                <label for="res-requests">Special Requests (Optional)</label>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-text back-btn" data-target="step2-times"><i data-lucide="arrow-left"></i> Back</button>
+                <button type="submit" class="btn btn-primary">Confirm Reservation</button>
+              </div>
+            </form>
+
+            <!-- Step 4: Success -->
+            <div id="step4-success" class="res-step hidden-step text-center">
+              <div class="success-icon"><i data-lucide="check-circle"></i></div>
+              <h3>Reservation Confirmed</h3>
+              <p>We look forward to welcoming you, <span id="success-name"></span>.</p>
+              <div class="success-details">
+                <p><strong>Date:</strong> <span id="success-date"></span></p>
+                <p><strong>Time:</strong> <span id="success-time"></span></p>
+                <p><strong>Guests:</strong> <span id="success-guests"></span></p>
+              </div>
+              <button class="btn btn-outline mt-4" id="reset-res-btn">Make Another Booking</button>
+            </div>
           </div>
         </div>
       </section>

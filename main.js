@@ -106,7 +106,7 @@ const menuData = {
 
 // --- Menu Hover Image Logic ---
 const menuHoverImage = document.createElement('img');
-menuHoverImage.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'; // Tuna tartare macro shot
+menuHoverImage.src = '/assets/images/food-appetizer.png'; // Tuna tartare macro shot
 menuHoverImage.className = 'menu-hover-image';
 menuHoverImage.alt = "Tuna Tartare";
 document.body.appendChild(menuHoverImage);
@@ -226,10 +226,22 @@ const mobFullReservationForm = document.getElementById('mob-full-reservation-for
 if (mobFullReservationForm) {
   mobFullReservationForm.addEventListener('submit', e => {
     e.preventDefault();
-    alert('Thank you! Your mobile reservation request has been received.');
+    
+    const date = document.getElementById('mob-res-date').value;
+    const guests = document.getElementById('mob-res-guests').value;
+    
+    const mainDateInput = document.getElementById('res-date');
+    const mainGuestsInput = document.getElementById('res-guests');
+    if (mainDateInput) mainDateInput.value = date;
+    if (mainGuestsInput) mainGuestsInput.value = guests;
+    
     mobileBookingModal.classList.remove('active');
     document.body.style.overflow = '';
-    e.target.reset();
+    
+    window.location.href = '#reservations';
+    if (date && typeof step1Form !== 'undefined') {
+      step1Form.dispatchEvent(new Event('submit'));
+    }
   });
 }
 
@@ -276,11 +288,119 @@ if (mapContainer && typeof L !== 'undefined') {
     .openPopup();
 }
 
+// --- Reservation Flow Logic ---
+let reservationData = {
+  date: '',
+  guests: '',
+  time: ''
+};
+
+const step1Form = document.getElementById('step1-form');
+const step2Times = document.getElementById('step2-times');
+const step3Details = document.getElementById('step3-details');
+const step4Success = document.getElementById('step4-success');
+const timeSlotsContainer = document.getElementById('time-slots-container');
+
+function switchStep(hideElement, showElement) {
+  hideElement.classList.remove('active-step');
+  hideElement.classList.add('hidden-step');
+  showElement.classList.remove('hidden-step');
+  showElement.classList.add('active-step');
+  lucide.createIcons();
+}
+
+// Set min date for date pickers to today
+const dateInputs = document.querySelectorAll('input[type="date"]');
+const today = new Date().toISOString().split('T')[0];
+dateInputs.forEach(input => input.setAttribute('min', today));
+
+if (step1Form) {
+  step1Form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    reservationData.date = document.getElementById('res-date').value;
+    reservationData.guests = document.getElementById('res-guests').value;
+    
+    // Format date for display
+    const dateObj = new Date(reservationData.date);
+    const dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    
+    document.getElementById('summary-date-guests').textContent = `${dateStr} for ${reservationData.guests} Guest(s)`;
+    
+    // Generate dummy time slots
+    const times = ['17:00', '17:30', '18:00', '19:30', '20:00', '21:00'];
+    timeSlotsContainer.innerHTML = '';
+    times.forEach(time => {
+      const btn = document.createElement('button');
+      btn.className = 'time-slot-btn';
+      // Format time
+      const [hour, min] = time.split(':');
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const formattedHour = hour % 12 || 12;
+      btn.textContent = `${formattedHour}:${min} ${ampm}`;
+      
+      btn.addEventListener('click', () => {
+        reservationData.time = btn.textContent;
+        document.getElementById('summary-time').textContent = `${dateStr} at ${reservationData.time}`;
+        switchStep(step2Times, step3Details);
+      });
+      timeSlotsContainer.appendChild(btn);
+    });
+    
+    switchStep(step1Form, step2Times);
+  });
+}
+
+if (step3Details) {
+  step3Details.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('res-name').value;
+    
+    document.getElementById('success-name').textContent = name;
+    
+    const dateObj = new Date(reservationData.date);
+    document.getElementById('success-date').textContent = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    document.getElementById('success-time').textContent = reservationData.time;
+    document.getElementById('success-guests').textContent = reservationData.guests;
+    
+    switchStep(step3Details, step4Success);
+  });
+}
+
+// Back buttons
+document.querySelectorAll('.back-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const targetId = e.currentTarget.getAttribute('data-target');
+    const currentStep = e.currentTarget.closest('.res-step');
+    const targetStep = document.getElementById(targetId);
+    if (currentStep && targetStep) {
+      switchStep(currentStep, targetStep);
+    }
+  });
+});
+
+const resetResBtn = document.getElementById('reset-res-btn');
+if (resetResBtn) {
+  resetResBtn.addEventListener('click', () => {
+    step1Form.reset();
+    step3Details.reset();
+    switchStep(step4Success, step1Form);
+  });
+}
+
 // Form submissions (prevent default for demo)
 document.getElementById('quick-book-form').addEventListener('submit', e => {
   e.preventDefault();
-  alert('Redirecting to full reservation system...');
+  // Pre-fill full form if needed
+  const date = document.getElementById('quick-date').value;
+  const guests = document.getElementById('quick-guests').value;
+  document.getElementById('res-date').value = date;
+  document.getElementById('res-guests').value = guests;
+  
   window.location.href = '#reservations';
+  // Trigger submit on step 1 to move to step 2 immediately
+  if (date) {
+    step1Form.dispatchEvent(new Event('submit'));
+  }
 });
 
 document.getElementById('contact-form').addEventListener('submit', e => {

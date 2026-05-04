@@ -418,39 +418,38 @@ a {
 /* Inline Booking Form */
 .inline-booking {
   display: flex;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  padding: var(--space-2) var(--space-4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  padding: 8px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 40px;
   margin-top: var(--space-5);
   gap: var(--space-3);
   align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
-.booking-field { flex: 1; display: flex; align-items: center; gap: var(--space-2); }
+.booking-field { flex: 1; display: flex; align-items: center; }
 .booking-field label {
-  display: block;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--ash);
-  margin-bottom: 0;
-  white-space: nowrap;
+  display: none;
 }
 .booking-field input,
 .booking-field select {
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid transparent;
   color: var(--bone);
   padding: 8px 0;
-  font-size: 1rem;
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
 }
 .booking-field input:focus,
 .booking-field select:focus {
   outline: none;
-  border-color: var(--gold);
+}
+.booking-submit {
+  border-radius: 30px;
+  padding: 8px 24px;
 }
 
 .scroll-indicator {
@@ -529,8 +528,9 @@ a {
 .menu-item-price {
   color: var(--ash);
   font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 0.875rem;
+  font-weight: 300;
+  font-size: 0.75rem;
+  opacity: 0.8;
 }
 
 /* Menu Hover Image */
@@ -719,7 +719,7 @@ a {
   font-family: var(--font-serif);
   font-size: 40rem;
   line-height: 1;
-  color: rgba(201, 169, 110, 0.05); /* Gold watermark */
+  color: rgba(201, 169, 110, 0.1); /* Gold watermark */
   position: absolute;
   top: -150px;
   left: 50%;
@@ -736,7 +736,7 @@ a {
   color: var(--cream);
   max-width: 800px;
   margin: 0 auto var(--space-4);
-  line-height: 1.8;
+  line-height: 2.2;
 }
 .chef-name {
   font-size: 0.875rem;
@@ -901,7 +901,18 @@ a {
 }
 
 .reservations-info { flex: 1; min-width: 300px; }
-.reservations-form-wrapper { flex: 1; min-width: 300px; }
+.reservations-form-wrapper { 
+  flex: 1; 
+  min-width: 300px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.reservations-form-wrapper > form,
+.reservations-form-wrapper > div {
+  width: 100%;
+  max-width: 450px;
+}
 
 .guidelines-list {
   list-style: none;
@@ -925,6 +936,87 @@ a {
   grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
 }
+
+/* Reservation Flow Steps */
+.res-step {
+  display: none;
+  animation: fadeInStep 0.4s ease forwards;
+}
+.res-step.active-step {
+  display: block;
+}
+@keyframes fadeInStep {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hidden-step { display: none !important; }
+
+.step-subtitle {
+  color: var(--gold);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-3);
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--space-2);
+}
+.time-slot-btn {
+  background: transparent;
+  border: 1px solid var(--stone);
+  color: var(--bone);
+  padding: 10px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.time-slot-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-4);
+}
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--ash);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+.btn-text:hover { color: var(--gold); }
+
+.success-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+.success-icon i {
+  width: 48px;
+  height: 48px;
+  color: var(--gold);
+}
+.success-details {
+  background: rgba(255,255,255,0.03);
+  padding: var(--space-3);
+  border: 1px solid var(--stone);
+  margin-top: var(--space-4);
+  text-align: left;
+}
+.success-details p { margin-bottom: 8px; color: var(--bone); }
 
 /* =========================================
    Contact Section
@@ -973,8 +1065,8 @@ a {
   min-height: 400px;
   background: var(--stone); /* fallback */
   filter: grayscale(100%) invert(90%) hue-rotate(180deg) contrast(150%); /* Dark map trick */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%);
-  mask-image: linear-gradient(to right, transparent 0%, black 15%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%);
+  mask-image: linear-gradient(to right, transparent 0%, black 30%);
 }
 
 /* =========================================
